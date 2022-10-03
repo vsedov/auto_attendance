@@ -1,0 +1,107 @@
+{
+    "03/10/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Language Practical Group 03",
+            "attendance": "",
+            "start": "1700 - 1800"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "",
+            "start": "1600 - 1700"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "Y",
+            "start": "1000 - 1100"
+        }
+    ],
+    "04/10/2022": [
+        {
+            "Lesson": "CS3940 Intelligent Agents & MA System Language Practical Group 01",
+            "attendance": "",
+            "start": "1700 - 1800"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "",
+            "start": "1000 - 1100"
+        }
+    ],
+    "05/10/2022": [
+        {
+            "Lesson": "CS3940 Intelligent Agents & MA System Lecture Group 01",
+            "attendance": "",
+            "start": "0900 - 1000"
+        }
+    ],
+    "06/10/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Lecture Group 01",
+            "attendance": "",
+            "start": "1600 - 1700"
+        }
+    ],
+    "07/10/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Lecture Group 01",
+            "attendance": "",
+            "start": "1700 - 1800"
+        }
+    ],
+    "26/09/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Language Practical Group 03",
+            "attendance": "Y",
+            "start": "1700 - 1800"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "Y",
+            "start": "1600 - 1700"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "N",
+            "start": "1000 - 1100"
+        }
+    ],
+    "27/09/2022": [
+        {
+            "Lesson": "CS3940 Intelligent Agents & MA System Language Practical Group 01",
+            "attendance": "N",
+            "start": "1700 - 1800"
+        },
+        {
+            "Lesson": "CS3003 IT Project Management Lecture Group 01",
+            "attendance": "Y",
+            "start": "1000 - 1100"
+        }
+    ],
+    "28/09/2022": [
+        {
+            "Lesson": "CS3822 Individual Project in AI Lecture Group 01",
+            "attendance": "Y",
+            "start": "1200 - 1300"
+        },
+        {
+            "Lesson": "CS3940 Intelligent Agents & MA System Lecture Group 01",
+            "attendance": "Y",
+            "start": "0900 - 1000"
+        }
+    ],
+    "29/09/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Lecture Group 01",
+            "attendance": "Y",
+            "start": "1600 - 1700"
+        }
+    ],
+    "30/09/2022": [
+        {
+            "Lesson": "CS3920 Machine Learning Lecture Group 01",
+            "attendance": "Y",
+            "start": "1700 - 1800"
+        }
+    ]
+}
