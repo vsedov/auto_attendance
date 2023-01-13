@@ -1,0 +1,28 @@
+{
+    "09/01/2023": [
+        {
+            "Lesson": "IY3612 Cyber Security Lecture Group 01",
+            "attendance": "N",
+            "start": "0900 - 1200"
+        }
+    ],
+    "12/01/2023": [
+        {
+            "Lesson": "IY3501 Security Management Workshop Group 01",
+            "attendance": "Y",
+            "start": "1500 - 1600"
+        }
+    ],
+    "13/01/2023": [
+        {
+            "Lesson": "CS3510 Functional Programming & Apps Lecture Group 01",
+            "attendance": "",
+            "start": "1500 - 1700"
+        },
+        {
+            "Lesson": "IY3501 Security Management Lecture Group 01",
+            "attendance": "",
+            "start": "1300 - 1500"
+        }
+    ]
+}

@@ -34,10 +34,9 @@ if root.handlers:
         root.removeHandler(handler)()
 
 FORMAT = "%(message)s"
-logging.basicConfig(level="INFO",
-                    format=FORMAT,
-                    datefmt="[%X]",
-                    handlers=[RichHandler()])
+logging.basicConfig(
+    level="INFO", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
+)
 
 __import__("dotenv").load_dotenv()
 
@@ -47,9 +46,10 @@ def init_webdriver():
     # if FIREFOXPATH is not None:
     logging.info(FIREFOXPATH)
     from selenium.webdriver.firefox.options import Options
+
     options = Options()
     options.binary = FIREFOXPATH
-    options.add_argument("-headless")
+    # options.add_argument("-headless")
     return webdriver.Firefox(options=options, log_path="geckodriver.log")
 
     # from selenium.webdriver.chrome.options import Options
@@ -61,7 +61,6 @@ def init_webdriver():
 
 
 class Attendance:
-
     def __init__(self, live_check: bool = True):
         self.current_information = defaultdict(list)
         self.driver = init_webdriver()
@@ -78,21 +77,48 @@ class Attendance:
         """Login Path to register user with email and password"""
         # self.driver.get("www.google.com")
 
-        self.driver.get("http://lum-prod.ec.royalholloway.ac.uk")
-        time.sleep(2)
-        self.wait_for_element("userNameInput")
-        username = self.driver.find_element(By.ID, "userNameInput")
-        password = self.driver.find_element(By.ID, "passwordInput")
-        logging.info(
-            ic.format("Logging in with username: {}".format(self.user_name)))
-        username.send_keys(self.user_name)
-        logging.info(ic.format("Logging in with password"))
-        password.send_keys(self.password)
-        loginbtn = self.driver.find_element(By.ID, "submitButton")
-        loginbtn.click()
+        # self.driver.get("http://lum-prod.ec.royalholloway.ac.uk")
+        # time.sleep(2)
+        # self.wait_for_element("userNameInput")
+        # username = self.driver.find_element(By.ID, "userNameInput")
+        # password = self.driver.find_element(By.ID, "passwordInput")
+        # logging.info(
+        #     ic.format("Logging in with username: {}".format(self.user_name))
+        # )
+        # username.send_keys(self.user_name)
+        # logging.info(ic.format("Logging in with password"))
+        # password.send_keys(self.password)
+        # loginbtn = self.driver.find_element(By.ID, "submitButton")
+        # loginbtn.click()
+
         self.driver.get(
             "https://generalssb-prod.ec.royalholloway.ac.uk/BannerExtensibility/customPage/page/RHUL_Attendance_Student"
         )
+        self.wait_for_element("idSIButton9")
+        username = self.driver.find_element(By.ID, "i0116")
+        username.send_keys(self.user_name)
+        loginbtn = self.driver.find_element(By.ID, "idSIButton9")
+        loginbtn.click()
+        self.wait_for_element("i0118")
+        password = self.driver.find_element(By.ID, "i0118")
+        password.send_keys(self.password)
+        login = self.driver.find_element(By.ID, "idSIButton9")
+        login.click()
+        self.wait_for_element("idBtn_Back", 60)
+        self.wait_for_element("idSIButton9", 60)
+        login = self.driver.find_element(By.ID, "idSIButton9")
+        login.click()
+        #  TODO: (vsedov) (14:03:51 - 13/01/23): 2fa is a big issue right now,
+        #  the button id issue is aonther thing but a quick refactor can change
+        #  that but im too lazy for this.
+        #  The issue is being able to send a txt message from a phone to the
+        #  server- without having it be an issue. An alterntive way of this is
+        #  instead of loading it on cronjobs , one can load it through core
+        #  server utilities, meaning that it would run constantly, and ensure
+        #  the website does not go down - this can be a bit tediousum as the up
+        #  time, would be nearly as long as what ever the time of start data
+        #  would be. Most likely will be a while loop.
+
         logging.info(ic.format("Logged in"))
         self.is_active = True
 
@@ -108,7 +134,8 @@ class Attendance:
         pattern = "pbid-htmlTwoWeekSchedule-td-displayTwoWeekSchedule{0}-{1}"
 
         self.wait_for_element(
-            "pbid-htmlTwoWeekSchedule-td-displayTwoWeekScheduleDate-1")
+            "pbid-htmlTwoWeekSchedule-td-displayTwoWeekScheduleDate-1"
+        )
 
         def parser(type: str, index: int) -> str:
             return pattern.format(type, index)
@@ -117,13 +144,15 @@ class Attendance:
             for i in range(0, 22):
                 date = self.driver.find_element(By.ID, parser("Date", i)).text
                 lesson = {
-                    "start":
-                    self.driver.find_element(By.ID, parser("Time", i)).text,
-                    "attendance":
-                    self.driver.find_element(By.ID, parser("Attendance",
-                                                           i)).text,
-                    "Lesson":
-                    self.driver.find_element(By.ID, parser("Course", i)).text,
+                    "start": self.driver.find_element(
+                        By.ID, parser("Time", i)
+                    ).text,
+                    "attendance": self.driver.find_element(
+                        By.ID, parser("Attendance", i)
+                    ).text,
+                    "Lesson": self.driver.find_element(
+                        By.ID, parser("Course", i)
+                    ).text,
                 }
                 if date not in self.current_information:
                     self.current_information[date] = []
@@ -136,9 +165,10 @@ class Attendance:
         # This is just for a back up just in case
         with open("attendance.json", "+w") as f:
             f.write(
-                json.dumps({**self.current_information},
-                           indent=4,
-                           sort_keys=True))
+                json.dumps(
+                    {**self.current_information}, indent=4, sort_keys=True
+                )
+            )
             logging.info(ic.format("Saved attandance info"))
 
     def time_out_recovery(self) -> None:
@@ -147,7 +177,7 @@ class Attendance:
         logging.info("Recovering from time out")
         time.sleep(1)
 
-    def wait_for_element(self, id: str) -> None:
+    def wait_for_element(self, id: str, length=20) -> None:
         """Wait for element to be visible
 
         Parameters
@@ -157,16 +187,18 @@ class Attendance:
         """
         logging.info(ic.format("Waiting for element to be visible", id))
         try:
-            WebDriverWait(self.driver, 10).until(
-                EC.visibility_of_element_located((By.ID, id)))
+            WebDriverWait(self.driver, length).until(
+                EC.visibility_of_element_located((By.ID, id))
+            )
         except Exception as e:
             logging.info(self.driver)
             logging.error(ic.format("error is {}".format(e)))
             logging.info(ic.format("Element not found", id))
             self.wait_for_element(id)
 
-    def is_in_time_period(self, start_time: time, end_time: time,
-                          now_time: time) -> bool:
+    def is_in_time_period(
+        self, start_time: time, end_time: time, now_time: time
+    ) -> bool:
         if start_time < end_time:
             return now_time >= start_time and now_time <= end_time
         else:
@@ -185,7 +217,8 @@ class Attendance:
 
     def check_live_pop_up(self) -> bool:
         self.wait_for_element(
-            "pbid-htmlTwoWeekSchedule-td-displayTwoWeekScheduleDate-1")
+            "pbid-htmlTwoWeekSchedule-td-displayTwoWeekScheduleDate-1"
+        )
         # Extra wait if needed
         logging.info(ic.format("Checking live pop sleeping for 5 seconds"))
         time.sleep(5)
@@ -205,8 +238,10 @@ class Attendance:
                     continue
                 self.driver.execute_script("arguments[0].click();", click)
                 logging.info(
-                    ic.format("Clicked Live Pop up : {}".format(
-                        pop_up_button[i])))
+                    ic.format(
+                        "Clicked Live Pop up : {}".format(pop_up_button[i])
+                    )
+                )
                 return True
             except:
                 logging.info(ic.format("No pop up found"))
@@ -232,9 +267,12 @@ class Attendance:
                 self.check_live_pop_up()
 
     def live_check(self) -> None:
-        """ Live check, this is a program that will not sleep and would continue """
+        """Live check, this is a program that will not sleep and would continue"""
         while True and self.is_active:
-            if self.driver.current_url == "https://generalssb-prod.ec.royalholloway.ac.uk/BannerExtensibility/ssb/logout/timeoutPage":
+            if (
+                self.driver.current_url
+                == "https://generalssb-prod.ec.royalholloway.ac.uk/BannerExtensibility/ssb/logout/timeoutPage"
+            ):
                 self.time_out_recovery()
 
             elif self.live_check_bool():
@@ -248,7 +286,7 @@ class Attendance:
                     pass
 
     def __del__(self):
-        """ Kill all firefox instance """
+        """Kill all firefox instance"""
         logging.info(ic.format("Closing Driver"))
         self.driver.close()
 
@@ -259,13 +297,18 @@ class Attendance:
         logging.info(ic.format("Firefox killed"))
 
         logging.info(
-            ("----------------------------------------------------\n"
-             "|   Date: {}                                         \n"
-             "|   Day: {}                                         \n"
-             "|   Time: {}                                        \n"
-             "| ---------------End of Program---------------------\n").format(
-                 time.strftime("%d:%m:%Y"), time.strftime("%A"),
-                 time.strftime("%H:%M:%S")))  # noqa
+            (
+                "----------------------------------------------------\n"
+                "|   Date: {}                                         \n"
+                "|   Day: {}                                         \n"
+                "|   Time: {}                                        \n"
+                "| ---------------End of Program---------------------\n"
+            ).format(
+                time.strftime("%d:%m:%Y"),
+                time.strftime("%A"),
+                time.strftime("%H:%M:%S"),
+            )
+        )  # noqa
 
     def __call__(self):
         self.login_path()
