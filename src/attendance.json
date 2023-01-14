@@ -16,12 +16,12 @@
     "13/01/2023": [
         {
             "Lesson": "CS3510 Functional Programming & Apps Lecture Group 01",
-            "attendance": "",
+            "attendance": "N",
             "start": "1500 - 1700"
         },
         {
             "Lesson": "IY3501 Security Management Lecture Group 01",
-            "attendance": "",
+            "attendance": "Y",
             "start": "1300 - 1500"
         }
     ]
