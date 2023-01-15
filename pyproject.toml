@@ -12,9 +12,37 @@ tqdm = "^4.64.1"
 icecream = "^2.1.3"
 python-dotenv = "^0.21.0"
 psutil = "^5.9.2"
+pyotp = "^2.8.0"
 
 [tool.poetry.dev-dependencies]
 
+
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+dev = []
+
+[tool.pdm.build]
+includes = []
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[project]
+authors = [
+    {name = "vsedov", email = "viv.sedov@hotmail.com"},
+]
+requires-python = ">=3.10,<4.0"
+dependencies = [
+    "selenium<5.0.0,>=4.4.3",
+    "rich<13.0.0,>=12.5.1",
+    "tqdm<5.0.0,>=4.64.1",
+    "icecream<3.0.0,>=2.1.3",
+    "python-dotenv<1.0.0,>=0.21.0",
+    "psutil<6.0.0,>=5.9.2",
+    "pyotp>=2.8.0",
+]
+name = "pythonautoattendance"
+version = "0.1.0"
+description = ""
+
+[project.urls]
