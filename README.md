@@ -23,7 +23,7 @@ Lectures are pointless, but they annoy me if my attendance is low, so this bot g
 7. Note: Dont bother with lectures. 
 
 
-To formally run this script, use a server like digital ocean and run cronejobs, per house or something. 
+To formally run this script, use a server like digital ocean and run cronejobs, per hour or something. 
 
 To run this script on a personal computer, you can set up a crontab to run the script every hour past the hour, from 9am to 6pm. An example command for this would be:
 
