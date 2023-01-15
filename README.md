@@ -24,3 +24,13 @@ Lectures are pointless, but they annoy me if my attendance is low, so this bot g
 
 
 To formally run this script, use a server like digital ocean and run cronejobs, per house or something. 
+
+To run this script on a personal computer, you can set up a crontab to run the script every hour past the hour, from 9am to 6pm. An example command for this would be:
+
+```
+0 9-18 * * * poetry run python /path/to/src/PythonAuto.py
+```
+
+This command will run the script every hour from 9am to 6pm, every day.
+
+Using a server like DigitalOcean can be useful for running the script continuously, even when your personal computer is turned off. However, if you are not familiar with setting up and managing a server, it may be best to stick to running the script on your personal computer with a crontab. It is also important to note that using this script may violate your University or college's policies, so use it at your own risk. [But I assume you dont care so meh what ever]. 
