@@ -28,7 +28,7 @@ To formally run this script, use a server like digital ocean and run cronejobs, 
 To run this script on a personal computer, you can set up a crontab to run the script every hour past the hour, from 9am to 6pm. An example command for this would be:
 
 ```
-0 9-18 * * * poetry run python /path/to/src/PythonAuto.py
+30 9-18 * * 1-5 cd /PATH/auto_attendance/  && /usr/bin/python3.9 src/PythonAuto.py >> /PATH/auto_attendance/Cron.log 2>&1
 ```
 
 This command will run the script every hour from 9am to 6pm, every day.
