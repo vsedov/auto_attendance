@@ -4,7 +4,7 @@ Lectures are pointless, but they annoy me if my attendance is low, so this bot g
 
 ## How to run this?
 
-1. Create an environment with the following:
+1. Create an environment with the following: Within a new file called .env
 
     ```
     EMAIL="UNI_EMAIL"
