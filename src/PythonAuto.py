@@ -17,6 +17,7 @@ from collections import defaultdict
 from shutil import which
 
 import psutil
+import pyotp
 from icecream import ic
 from rich.logging import RichHandler
 from selenium import webdriver
@@ -49,22 +50,15 @@ def init_webdriver():
 
     options = Options()
     options.binary = FIREFOXPATH
-    # options.add_argument("-headless")
+    options.add_argument("-headless")
     return webdriver.Firefox(options=options, log_path="geckodriver.log")
-
-    # from selenium.webdriver.chrome.options import Options
-    # opts = Options()
-    # opts.binary_location = "/usr/bin/chromium"
-    # driver = webdriver.Chrome(chrome_options=opts)
-    # return driver
-    #
 
 
 class Attendance:
     def __init__(self, live_check: bool = True):
         self.current_information = defaultdict(list)
         self.driver = init_webdriver()
-        logging.info(ic.format("Initializing, succesful get of dirver"))
+        logging.info(ic.format("Initializing, successful get of driver"))
 
         self.user_name = os.getenv("EMAIL")
         self.password = os.getenv("PASS")
@@ -75,52 +69,57 @@ class Attendance:
 
     def login_path(self) -> None:
         """Login Path to register user with email and password"""
-        # self.driver.get("www.google.com")
+        self.navigate_to_login_page()
+        self.enter_username()
+        self.click_login_button()
+        self.enter_password()
+        self.click_login_button()
+        self.handle_two_factor_authentication()
+        self.is_active = True
+        logging.info(ic.format("Logged in"))
 
-        # self.driver.get("http://lum-prod.ec.royalholloway.ac.uk")
-        # time.sleep(2)
-        # self.wait_for_element("userNameInput")
-        # username = self.driver.find_element(By.ID, "userNameInput")
-        # password = self.driver.find_element(By.ID, "passwordInput")
-        # logging.info(
-        #     ic.format("Logging in with username: {}".format(self.user_name))
-        # )
-        # username.send_keys(self.user_name)
-        # logging.info(ic.format("Logging in with password"))
-        # password.send_keys(self.password)
-        # loginbtn = self.driver.find_element(By.ID, "submitButton")
-        # loginbtn.click()
-
+    def navigate_to_login_page(self):
         self.driver.get(
             "https://generalssb-prod.ec.royalholloway.ac.uk/BannerExtensibility/customPage/page/RHUL_Attendance_Student"
         )
         self.wait_for_element("idSIButton9")
+
+    def enter_username(self):
         username = self.driver.find_element(By.ID, "i0116")
         username.send_keys(self.user_name)
+
+    def click_login_button(self):
         loginbtn = self.driver.find_element(By.ID, "idSIButton9")
         loginbtn.click()
+
+    def enter_password(self):
         self.wait_for_element("i0118")
         password = self.driver.find_element(By.ID, "i0118")
         password.send_keys(self.password)
-        login = self.driver.find_element(By.ID, "idSIButton9")
-        login.click()
-        self.wait_for_element("idBtn_Back", 60)
-        self.wait_for_element("idSIButton9", 60)
-        login = self.driver.find_element(By.ID, "idSIButton9")
-        login.click()
-        #  TODO: (vsedov) (14:03:51 - 13/01/23): 2fa is a big issue right now,
-        #  the button id issue is aonther thing but a quick refactor can change
-        #  that but im too lazy for this.
-        #  The issue is being able to send a txt message from a phone to the
-        #  server- without having it be an issue. An alterntive way of this is
-        #  instead of loading it on cronjobs , one can load it through core
-        #  server utilities, meaning that it would run constantly, and ensure
-        #  the website does not go down - this can be a bit tediousum as the up
-        #  time, would be nearly as long as what ever the time of start data
-        #  would be. Most likely will be a while loop.
 
-        logging.info(ic.format("Logged in"))
-        self.is_active = True
+    def handle_two_factor_authentication(self):
+        time.sleep(2)
+        wait = self.driver.find_element(By.ID, "signInAnotherWay")
+        wait.click()
+        time.sleep(3)
+        elements = self.driver.find_elements(
+            By.XPATH, "//div[@data-bind='text: display']"
+        )
+
+        # iterate through the list of elements
+        for element in elements:
+            if element.text == "Use a verification code":
+                element.click()
+                break
+        self.wait_for_element("idTxtBx_SAOTCC_OTC", 60)
+        input_box = self.driver.find_element(By.ID, "idTxtBx_SAOTCC_OTC")
+        input_box.send_keys(pyotp.TOTP(os.getenv("PRIVKEY")).now())
+        self.wait_for_element("idSubmit_SAOTCC_Continue", 20)
+        time.sleep(2)
+        button = self.driver.find_element(By.ID, "idSubmit_SAOTCC_Continue")
+        button.click()
+        self.wait_for_element("idSIButton9")
+        self.click_login_button()
 
     def reset_driver(self) -> None:
         logging.info(ic.format("Resetting driver"))
