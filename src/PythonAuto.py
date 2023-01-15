@@ -302,7 +302,7 @@ class Attendance:
     def __call__(self):
         self.login_path()
         self.check_live_pop_up()
-        self.get_attandance_info()
+        self.get_attendance_info()
 
 
 def main() -> None:
