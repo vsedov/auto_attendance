@@ -21,3 +21,6 @@ Lectures are pointless, but they annoy me if my attendance is low, so this bot g
 6. Troubleshoot: If you have any issues running the script, please make sure that you have the latest version of Firefox and Selenium installed on your machine.
 
 7. Note: Dont bother with lectures. 
+
+
+To formally run this script, use a server like digital ocean and run cronejobs, per house or something. 
