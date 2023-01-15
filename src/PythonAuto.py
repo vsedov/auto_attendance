@@ -127,8 +127,8 @@ class Attendance:
         self.driver = webdriver.Firefox()
         self.is_active = False
 
-    def get_attandance_info(self) -> None:
-        logging.info(ic.format("Getting and saving attandance info"))
+    def get_attendance_info(self) -> None:
+        logging.info(ic.format("Getting and saving attendance info"))
 
         pattern = "pbid-htmlTwoWeekSchedule-td-displayTwoWeekSchedule{0}-{1}"
 
@@ -140,7 +140,7 @@ class Attendance:
             return pattern.format(type, index)
 
         try:
-            for i in range(0, 22):
+            for i in range(22):
                 date = self.driver.find_element(By.ID, parser("Date", i)).text
                 lesson = {
                     "start": self.driver.find_element(
@@ -158,17 +158,12 @@ class Attendance:
 
                 self.current_information[date].append(lesson)
         except Exception as e:
-            logging.error(ic.format("error is {}".format(e)))
-            pass
+            logging.error(ic.format(f"Error is {e}"))
 
         # This is just for a back up just in case
-        with open("attendance.json", "+w") as f:
-            f.write(
-                json.dumps(
-                    {**self.current_information}, indent=4, sort_keys=True
-                )
-            )
-            logging.info(ic.format("Saved attandance info"))
+        with open("attendance.json", "w") as f:
+            json.dump(self.current_information, f, indent=4, sort_keys=True)
+            logging.info(ic.format("Saved attendance info"))
 
     def time_out_recovery(self) -> None:
         """Time out recovery if occours"""
@@ -285,29 +280,24 @@ class Attendance:
                     pass
 
     def __del__(self):
-        """Kill all firefox instance"""
+        """Kill all Firefox instances"""
         logging.info(ic.format("Closing Driver"))
         self.driver.close()
 
-        logging.info(ic.format("Killing all firefox instance"))
+        logging.info(ic.format("Killing all Firefox instances"))
         for proc in psutil.process_iter():
             if proc.name() == "firefox.exe":
                 proc.kill()  # kill the process
         logging.info(ic.format("Firefox killed"))
 
+        current_time = time.strftime("%d:%m:%Y %H:%M:%S")
+        current_day = time.strftime("%A")
         logging.info(
-            (
-                "----------------------------------------------------\n"
-                "|   Date: {}                                         \n"
-                "|   Day: {}                                         \n"
-                "|   Time: {}                                        \n"
-                "| ---------------End of Program---------------------\n"
-            ).format(
-                time.strftime("%d:%m:%Y"),
-                time.strftime("%A"),
-                time.strftime("%H:%M:%S"),
-            )
-        )  # noqa
+            f"----------------------------------------------------\n"
+            f"|   Date: {current_time}                              \n"
+            f"|   Day: {current_day}                                \n"
+            f"| ---------------End of Program---------------------\n"
+        )
 
     def __call__(self):
         self.login_path()
