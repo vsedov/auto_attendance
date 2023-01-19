@@ -99,9 +99,6 @@ class Attendance:
 
     def handle_two_factor_authentication(self):
         time.sleep(2)
-        wait = self.driver.find_element(By.ID, "signInAnotherWay")
-        wait.click()
-        time.sleep(3)
         elements = self.driver.find_elements(
             By.XPATH, "//div[@data-bind='text: display']"
         )
