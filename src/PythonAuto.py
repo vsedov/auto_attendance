@@ -220,6 +220,8 @@ class Attendance:
             '//*[@id="pbid-buttonFoundHappeningNowButtonsTwoInPerson"]',
             '//*[@id="pbid-buttonFoundHappeningNowButtonsHere"]',
             '//*[@id="pbid-LiteralFoundHappeningNowButtonsTwoHere"]',
+            '//*[@id="pbid-buttonFoundHappeningNowButtonsOneHere"]',
+
         ]
         # '//*[@id="pbid-buttonManualAttendance"]',
         for i in range(len(pop_up_button)):
