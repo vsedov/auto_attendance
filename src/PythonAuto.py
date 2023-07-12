@@ -183,7 +183,7 @@ class Attendance:
             )
         except Exception as e:
             logging.info(self.driver)
-            logging.error(ic.format("error is {}".format(e)))
+            logging.error(ic.format(f"error is {e}"))
             logging.info(ic.format("Element not found", id))
             self.wait_for_element(id)
 
@@ -222,22 +222,16 @@ class Attendance:
             '//*[@id="pbid-LiteralFoundHappeningNowButtonsTwoHere"]',
         ]
         # '//*[@id="pbid-buttonManualAttendance"]',
-        for i in range(len(pop_up_button)):
+        for item in pop_up_button:
             try:
-                click = self.driver.find_element(By.XPATH, pop_up_button[i])
+                click = self.driver.find_element(By.XPATH, item)
                 if not click.is_displayed():
                     continue
                 self.driver.execute_script("arguments[0].click();", click)
-                logging.info(
-                    ic.format(
-                        "Clicked Live Pop up : {}".format(pop_up_button[i])
-                    )
-                )
+                logging.info(ic.format(f"Clicked Live Pop up : {item}"))
                 return True
             except:
                 logging.info(ic.format("No pop up found"))
-                continue
-
         logging.info(ic.format("No pop up found"))
         return False
 
@@ -259,7 +253,7 @@ class Attendance:
 
     def live_check(self) -> None:
         """Live check, this is a program that will not sleep and would continue"""
-        while True and self.is_active:
+        while self.is_active:
             if (
                 self.driver.current_url
                 == "https://generalssb-prod.ec.royalholloway.ac.uk/BannerExtensibility/ssb/logout/timeoutPage"
@@ -274,7 +268,6 @@ class Attendance:
                     self.time_date_check(self)
                 except KeyError as error:
                     logging.debug(ic.format(error))
-                    pass
 
     def __del__(self):
         """Kill all Firefox instances"""
